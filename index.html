@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080B1C">
+<title>Operação Casamento — para Sofia</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-mood="pink">
+
+<div class="sky sky-a" aria-hidden="true"></div>
+<div class="sky sky-b" aria-hidden="true"></div>
+<canvas id="bg" aria-hidden="true"></canvas>
+<svg class="landscape" viewBox="0 0 800 200" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0 120 C120 60 220 140 360 100 C500 60 620 130 800 80 L800 200 L0 200Z" fill="#0b0a2a"/>
+  <path d="M0 160 C150 120 300 180 450 150 C600 120 700 170 800 140 L800 200 L0 200Z" fill="#05061a"/>
+</svg>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<div class="progress" role="progressbar" aria-label="Progresso da experiência" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <span id="bar"></span>
+</div>
+
+<main id="app">
+
+  <!-- 1. Introdução -->
+  <section class="screen" id="intro" aria-labelledby="introT">
+    <div class="card">
+      <h1 id="introT" class="sr-only" data-focus>Uma surpresa para Sofia</h1>
+      <div id="introText" class="typed"></div>
+      <button class="btn" id="btnStart" type="button">Descobrir minha surpresa ✨</button>
+    </div>
+  </section>
+
+  <!-- 2. Apresentação do quiz -->
+  <section class="screen" id="quizIntro" aria-labelledby="quizIntroT">
+    <div class="card">
+      <h2 id="quizIntroT" data-focus>💗 Quiz da Nossa História 💗</h2>
+      <div class="typed">
+        <p>Agora quero ver se você lembra direitinho de algumas coisinhas da nossa história, amor!</p>
+        <p>São perguntinhas simples, mas cada uma guarda uma lembrança especial.</p>
+        <p>Escolha as respostas e descubra até onde vai sua memória sobre nós dois.</p>
+        <p>Preparada?</p>
+      </div>
+      <button class="btn" id="btnQuizStart" type="button">Vamos começar! 💕</button>
+    </div>
+  </section>
+
+  <!-- 3. Quiz -->
+  <section class="screen" id="quiz" aria-labelledby="qText">
+    <div class="card">
+      <p class="kicker" id="qCount"></p>
+      <h2 id="qText" data-focus tabindex="-1"></h2>
+      <div id="qOptions" class="options"></div>
+      <p id="qFeedback" class="feedback" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- 4. Fechamento do quiz -->
+  <section class="screen" id="quizEnd" aria-labelledby="quizEndT">
+    <div class="card">
+      <h2 id="quizEndT" data-focus>Você terminou o nosso quiz! 💗</h2>
+      <p class="score" id="scoreText"></p>
+      <div class="typed">
+        <p>Cada pergunta foi uma pequena lembrança da nossa história.</p>
+        <p>E sabe de uma coisa?</p>
+        <p>Independentemente da pontuação, eu adoro ter essas memórias com você.</p>
+        <p>E ainda tem uma surpresa esperando...</p>
+      </div>
+      <button class="btn" id="btnQuizEnd" type="button">Quero descobrir! ✨</button>
+    </div>
+  </section>
+
+  <!-- 5. Minigame -->
+  <section class="screen game-screen" id="game" aria-labelledby="gameT">
+    <div id="gameLayer" class="game-layer"></div>
+    <div class="card game-card">
+      <div id="gameIntro">
+        <h2 id="gameT" data-focus>💗 Desafio do Coração 💗</h2>
+        <div class="typed">
+          <p>Agora você precisa capturar os coraçõezinhos que estão caindo pela tela.</p>
+          <p>Cada coração que você pegar vai preencher um pouquinho deste coração aqui.</p>
+          <p>Vamos ver se você consegue completar tudo, amor! ❤️</p>
+        </div>
+        <button class="btn" id="btnGameStart" type="button">Começar o desafio 💗</button>
+      </div>
+
+      <div id="gamePlay" hidden>
+        <svg class="bigheart-svg" viewBox="0 0 100 90" role="img" aria-label="Coração sendo preenchido">
+          <defs>
+            <clipPath id="heartClip">
+              <path d="M50 85 C10 55 0 30 15 15 C28 3 45 8 50 22 C55 8 72 3 85 15 C100 30 90 55 50 85 Z"/>
+            </clipPath>
+            <linearGradient id="heartGrad" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0" stop-color="#FF3D9A"/>
+              <stop offset="1" stop-color="#FFB8DC"/>
+            </linearGradient>
+          </defs>
+          <path d="M50 85 C10 55 0 30 15 15 C28 3 45 8 50 22 C55 8 72 3 85 15 C100 30 90 55 50 85 Z" fill="rgba(255,255,255,.08)" stroke="#FFB8DC" stroke-width="1.5"/>
+          <rect id="heartFill" x="0" y="90" width="100" height="0" fill="url(#heartGrad)" clip-path="url(#heartClip)"/>
+        </svg>
+        <p id="gameCount" class="score" role="status" aria-live="polite">0 / 20 corações</p>
+        <div class="meter" id="gameMeter"><span></span></div>
+        <button class="btn ghost small" id="btnKey" type="button">Coletar um coração (modo sem pressa)</button>
+      </div>
+
+      <div id="gameWin" hidden>
+        <h2>VOCÊ COMPLETOU O MEU CORAÇÃO! 💖</h2>
+        <div class="typed">
+          <p>KKKKKKK, parabéns, amor!</p>
+          <p>Mas, sinceramente, acho que você já tinha conquistado esse coração muito antes desse joguinho existir. 🥹❤️</p>
+        </div>
+        <button class="btn" id="btnGameContinue" type="button">Continuar nossa história ✨</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Transição -->
+  <section class="screen" id="transition" aria-labelledby="transT">
+    <div class="card">
+      <h2 id="transT" data-focus>Amor...</h2>
+      <div class="typed">
+        <p>Agora que você passou pelo nosso desafio, tenho uma última pergunta.</p>
+        <p>E prometo que essa é diferente de todas as outras...</p>
+        <p>Preparada? 👀❤️</p>
+      </div>
+      <button class="btn" id="btnAsk" type="button">Pode perguntar! 💍</button>
+    </div>
+  </section>
+
+  <!-- 7. O grande pedido -->
+  <section class="screen" id="proposal" aria-labelledby="askT">
+    <div class="moon" aria-hidden="true"></div>
+    <div class="card">
+      <div id="askBox">
+        <div class="bigheart" aria-hidden="true">💗</div>
+        <h2 id="askT" data-focus>Amor da minha vida...</h2>
+        <div class="typed">
+          <p>Depois de todas essas lembranças, tenho uma pergunta extremamente séria...</p>
+          <p class="big">Você aceita se casar comigo? 💍❤️</p>
+        </div>
+        <div class="choices">
+          <button class="btn" id="btnYes" type="button">SIM! 💖</button>
+          <button class="btn ghost" id="btnNo" type="button">NÃO... 😳</button>
+        </div>
+        <p id="noMsg" class="feedback soft" role="status" aria-live="polite"></p>
+        <div id="noOptions" class="choices" hidden>
+          <button class="btn ghost small" id="btnBack" type="button">Voltar à pergunta</button>
+          <button class="btn small" id="btnEnd" type="button">Encerrar a brincadeira ✨</button>
+        </div>
+      </div>
+
+      <div id="yesBox" hidden>
+        <h2 id="yesT" tabindex="-1">ELA ACEITOU!!! 💍❤️</h2>
+        <div class="typed">
+          <p>KKKKKKKKKKKKKKKKKK!</p>
+          <p>CALMA, AMOR, É BRINCADEIRINHA! 😭💗</p>
+          <p>Mas confesso que eu adoro imaginar todos os capítulos que ainda podemos viver juntos.</p>
+        </div>
+        <button class="btn" id="btnToLetter" type="button">Ver minha mensagem para você ❤️</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Carta final -->
+  <section class="screen" id="letter" aria-labelledby="letterT">
+    <article class="card letter">
+      <div class="glow-heart" aria-hidden="true">💗</div>
+      <h2 id="letterT" class="sr-only" data-focus>Carta para Sofia</h2>
+      <div id="letterText" class="typed letter-text"></div>
+      <button class="btn ghost small" id="btnSkip" type="button">Mostrar tudo</button>
+      <div id="letterEnd" hidden>
+        <p class="fim">FIM DA MISSÃO: CORAÇÃO CONQUISTADO 💗</p>
+        <div class="choices">
+          <button class="btn" id="btnRestart" type="button">Rever nossa história 🔄</button>
+          <button class="btn ghost small" id="btnTop" type="button">Voltar ao início</button>
+        </div>
+      </div>
+    </article>
+  </section>
+
+</main>
+
+<script src="js/effects.js"></script>
+<script src="js/navigation.js"></script>
+<script src="js/quiz.js"></script>
+<script src="js/minigame.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
